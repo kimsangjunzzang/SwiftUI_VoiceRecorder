@@ -6,13 +6,38 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    @StateObject private var pathModel = PathModel()
     @StateObject private var onboardingViewModel = OnboardingViewModel()
     
-  var body: some View {
-      // TODO: - 화면 전환 구현 필요
-      OnboardingContentView(onboardingViewModel: onboardingViewModel)
-  }
+    
+    var body: some View {
+        // TODO: - 화면 전환 구현 필요
+        NavigationStack(path: $pathModel.paths){
+            OnboardingContentView(onboardingViewModel: onboardingViewModel)
+                .navigationDestination(
+                    for: PathType.self,
+                    destination:{ pathType in
+                        switch pathType{
+                        case .homeView:
+                            HomeView()
+                                .navigationBarBackButtonHidden()
+                        case .todoView:
+                            TodoView()
+                                .navigationBarBackButtonHidden()
+                            
+                        case .memoView:
+                            MemoView()
+                                .navigationBarBackButtonHidden()
+                        }
+                        
+                    }
+                )
+        }
+        .environmentObject(pathModel)
+        
+    }
 }
+
 // MARK: - 온보딩 컨텐츠 뷰
 private struct OnboardingContentView : View{
     @ObservedObject private var onboardingViewModel: OnboardingViewModel
@@ -73,6 +98,7 @@ private struct OnboardingCellView: View{
     ) {
         self.onboardingContent = onboardingContent
     }
+    
     fileprivate var body: some View{
         VStack{
             Image(onboardingContent.imageFileName)
@@ -106,8 +132,13 @@ private struct OnboardingCellView: View{
 }
 // MARK: - 시작하기 버튼 뷰
 private struct StartView: View{
+    @EnvironmentObject private var pathModel: PathModel
+    
     fileprivate var body: some View{
-        Button(action: {}, label: {
+        Button(action: {
+            pathModel.paths.append(.homeView)
+            
+        }, label: {
             HStack{
                 Text("시작하기")
                     .font(.system(size: 16, weight: .medium))
