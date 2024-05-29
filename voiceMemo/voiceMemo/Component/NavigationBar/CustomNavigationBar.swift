@@ -25,6 +25,7 @@ struct CustomNavigationBar: View {
         self.rightBtnAction = rightBtnAction
         self.rightBtnType = rightBtnType
     }
+    
   var body: some View {
       HStack{
           if isDisplayLeftBtn{
