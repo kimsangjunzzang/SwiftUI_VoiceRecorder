@@ -13,6 +13,6 @@ struct Todo: Hashable{
     
     
     var convertedDayAndTime: String{
-        String("\(day.formattedDay) - \(time.formattedTime)에 알림")
+        String("\(day.formattedDay) - \(time.formattedTime) 에 알림")
     }
 }
